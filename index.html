@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Agent Dashboard</title>
+  <title>AI Agent - Futures Intraday</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>📈 AI Agent Intraday Dashboard (Beta)</h1>
+    <h1>📈 Futures Intraday Dashboard (Live)</h1>
 
     <table>
       <thead>
@@ -22,38 +22,31 @@
           <th>Verdict</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>KAYNES</td>
-          <td>Buy</td>
-          <td>09:35 AM</td>
-          <td>03:15 PM</td>
-          <td>T7, T9, T10</td>
-          <td>91%</td>
-          <td>✅ BUY</td>
-        </tr>
-        <tr>
-          <td>POLYCAB</td>
-          <td>Buy</td>
-          <td>09:50 AM</td>
-          <td>02:55 PM</td>
-          <td>T7, T9</td>
-          <td>87%</td>
-          <td>✅ BUY</td>
-        </tr>
-        <tr>
-          <td>BALRAMCHIN</td>
-          <td>Sell</td>
-          <td>09:40 AM</td>
-          <td>02:15 PM</td>
-          <td>T7, T10</td>
-          <td>82%</td>
-          <td>✅ SELL</td>
-        </tr>
+      <tbody id="data-body">
+        <!-- Live data from Google Sheet will load here -->
       </tbody>
     </table>
 
-    <p>🧠 This is a beta view. Swing, Sector & Trade Log tabs coming soon.</p>
+    <p>🧠 Auto-updated daily at 8 AM from your Chartink screener.</p>
   </div>
+
+  <script>
+    fetch("https://docs.google.com/spreadsheets/d/1RXB1C34AvW6rSaf2qasRaMV7Z_ZcbRVp4FpFZbhidRI/gviz/tq?tqx=out:json")
+      .then(res => res.text())
+      .then(text => {
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        const tableBody = document.getElementById("data-body");
+
+        json.table.rows.forEach(row => {
+          const tr = document.createElement("tr");
+          row.c.forEach(cell => {
+            const td = document.createElement("td");
+            td.textContent = cell ? cell.v : "";
+            tr.appendChild(td);
+          });
+          tableBody.appendChild(tr);
+        });
+      });
+  </script>
 </body>
 </html>
