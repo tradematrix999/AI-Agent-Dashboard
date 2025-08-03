@@ -3,12 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Agent - Filtered Intraday Picks</title>
+  <title>AI Agent - Verified Intraday Picks</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    th {
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>📈 Filtered Intraday Picks (AI Verified)</h1>
+    <h1>📈 AI-Verified Intraday Picks (Filtered)</h1>
 
     <table>
       <thead>
@@ -25,7 +30,7 @@
       <tbody id="data-body"></tbody>
     </table>
 
-    <p>✅ Showing only AI-confirmed Buy/Sell stocks from <strong>Filtered Picks</strong></p>
+    <p>✅ Only stocks passing all AI filters will appear here. Updated live from Google Sheet.</p>
   </div>
 
   <script>
@@ -43,6 +48,19 @@
             tr.appendChild(td);
           });
           tableBody.appendChild(tr);
+        });
+
+        // Enable sorting by clicking on table headers
+        document.querySelectorAll("th").forEach(header => {
+          header.addEventListener("click", () => {
+            const table = header.closest("table");
+            const index = Array.from(header.parentElement.children).indexOf(header);
+            const rows = Array.from(table.querySelectorAll("tbody tr"));
+            const sorted = rows.sort((a, b) =>
+              a.children[index].textContent.localeCompare(b.children[index].textContent)
+            );
+            sorted.forEach(row => table.querySelector("tbody").appendChild(row));
+          });
         });
       });
   </script>
