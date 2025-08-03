@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Agent - Futures Intraday</title>
+  <title>AI Agent - Filtered Intraday Picks</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>📈 Futures Intraday Dashboard (Live)</h1>
+    <h1>📈 Filtered Intraday Picks (AI Verified)</h1>
 
     <table>
       <thead>
@@ -22,16 +22,14 @@
           <th>Verdict</th>
         </tr>
       </thead>
-      <tbody id="data-body">
-        <!-- Live data from Google Sheet will load here -->
-      </tbody>
+      <tbody id="data-body"></tbody>
     </table>
 
-    <p>🧠 Auto-updated daily at 8 AM from your Chartink screener.</p>
+    <p>✅ Showing only AI-confirmed Buy/Sell stocks from <strong>Filtered Picks</strong></p>
   </div>
 
   <script>
-    fetch("https://docs.google.com/spreadsheets/d/1RXB1C34AvW6rSaf2qasRaMV7Z_ZcbRVp4FpFZbhidRI/gviz/tq?tqx=out:json")
+    fetch("https://docs.google.com/spreadsheets/d/1RXB1C34AvW6rSaf2qasRaMV7Z_ZcbRVp4FpFZbhidRI/gviz/tq?sheet=Filtered%20Picks&tqx=out:json")
       .then(res => res.text())
       .then(text => {
         const json = JSON.parse(text.substring(47).slice(0, -2));
