@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Agent Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📈 AI Agent Intraday Dashboard (Beta)</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Stock</th>
+          <th>Signal</th>
+          <th>Entry Time</th>
+          <th>Exit Time</th>
+          <th>Templates Passed</th>
+          <th>Confidence</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>KAYNES</td>
+          <td>Buy</td>
+          <td>09:35 AM</td>
+          <td>03:15 PM</td>
+          <td>T7, T9, T10</td>
+          <td>91%</td>
+          <td>✅ BUY</td>
+        </tr>
+        <tr>
+          <td>POLYCAB</td>
+          <td>Buy</td>
+          <td>09:50 AM</td>
+          <td>02:55 PM</td>
+          <td>T7, T9</td>
+          <td>87%</td>
+          <td>✅ BUY</td>
+        </tr>
+        <tr>
+          <td>BALRAMCHIN</td>
+          <td>Sell</td>
+          <td>09:40 AM</td>
+          <td>02:15 PM</td>
+          <td>T7, T10</td>
+          <td>82%</td>
+          <td>✅ SELL</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>🧠 This is a beta view. Swing, Sector & Trade Log tabs coming soon.</p>
+  </div>
+</body>
+</html>
