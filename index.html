@@ -3,17 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Agent - Verified Intraday Picks</title>
+  <title>AI Agent - Futures Intraday</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     th {
       cursor: pointer;
+      position: relative;
+    }
+    th::after {
+      content: " ⇅";
+      font-size: 12px;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>📈 AI-Verified Intraday Picks (Filtered)</h1>
+    <h1>📈 AI-Verified Futures Intraday Picks</h1>
 
     <table>
       <thead>
@@ -30,11 +40,13 @@
       <tbody id="data-body"></tbody>
     </table>
 
-    <p>✅ Only stocks passing all AI filters will appear here. Updated live from Google Sheet.</p>
+    <p>✅ Updated from Filtered Picks. Only AI-qualified stocks shown.</p>
   </div>
 
   <script>
-    fetch("https://docs.google.com/spreadsheets/d/1RXB1C34AvW6rSaf2qasRaMV7Z_ZcbRVp4FpFZbhidRI/gviz/tq?sheet=Filtered%20Picks&tqx=out:json")
+    const sheetURL = "https://docs.google.com/spreadsheets/d/1RXB1C34AvW6rSaf2qasRaMV7Z_ZcbRVp4FpFZbhidRI/gviz/tq?sheet=Filtered%20Picks&tqx=out:json";
+
+    fetch(sheetURL)
       .then(res => res.text())
       .then(text => {
         const json = JSON.parse(text.substring(47).slice(0, -2));
@@ -42,24 +54,40 @@
 
         json.table.rows.forEach(row => {
           const tr = document.createElement("tr");
-          row.c.forEach(cell => {
+          row.c.forEach((cell, index) => {
             const td = document.createElement("td");
-            td.textContent = cell ? cell.v : "";
+
+            // Fix confidence formatting if needed
+            if (index === 5 && cell && typeof cell.v === "number") {
+              td.textContent = Math.round(cell.v * 100) + "%";
+            } else {
+              td.textContent = cell ? cell.v : "";
+            }
+
             tr.appendChild(td);
           });
           tableBody.appendChild(tr);
         });
 
-        // Enable sorting by clicking on table headers
-        document.querySelectorAll("th").forEach(header => {
+        // Enable sorting
+        document.querySelectorAll("th").forEach((header, columnIndex) => {
+          let ascending = true;
           header.addEventListener("click", () => {
-            const table = header.closest("table");
-            const index = Array.from(header.parentElement.children).indexOf(header);
-            const rows = Array.from(table.querySelectorAll("tbody tr"));
-            const sorted = rows.sort((a, b) =>
-              a.children[index].textContent.localeCompare(b.children[index].textContent)
-            );
-            sorted.forEach(row => table.querySelector("tbody").appendChild(row));
+            const rows = Array.from(document.querySelectorAll("tbody tr"));
+            rows.sort((a, b) => {
+              const cellA = a.children[columnIndex].textContent.trim();
+              const cellB = b.children[columnIndex].textContent.trim();
+
+              const valA = isNaN(cellA) ? cellA : parseFloat(cellA);
+              const valB = isNaN(cellB) ? cellB : parseFloat(cellB);
+
+              return ascending
+                ? valA > valB ? 1 : -1
+                : valA < valB ? 1 : -1;
+            });
+
+            rows.forEach(row => tableBody.appendChild(row));
+            ascending = !ascending;
           });
         });
       });
